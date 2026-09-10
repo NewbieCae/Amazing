@@ -1,0 +1,12 @@
+# config par defaut du generateur
+WIDTH=20
+HEIGHT=15
+# coordonnees x,y de l'entree et de la sortie
+ENTRY=0,0
+EXIT=19,14
+OUTPUT_FILE=maze.txt
+# True = un seul chemin, False = mode pac-man avec boucles
+PERFECT=True
+# meme seed = meme labyrinthe
+SEED=42
+

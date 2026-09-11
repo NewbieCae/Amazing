@@ -95,13 +95,61 @@ def cell_entry_exit(maze, x: int, y:int) -> str:
         return "   "
 
 Etape 6: maze.find_path()
-...
-...
-...
+Pourquoi path and ? Parce que notre API de find_path() peut renvoyer None
+
+donc on verifie s'il y a un path, si c'est le cas est ce que (x, y) est dedans ?
+    show_path = True ou False
+    permet de montrer le chemin en fonction
+    on l'ajoute dans les fonctions display_maze et cell_entry_exit
+    et on change le path, on ajoute show_path dans le elif qui contient path
+    show_path = False -> on ignore le chemin
+    sa donne :
+    +---+---+---+---+
+    | E |   |       |
+    +---+   +---+   +
+    |           |   |
+    +   +---+   +---+
+    |       |     S |
+    +---+---+---+---+
+    show_path = True -> on vérifie si (x, y) appartient au path
+    sa donne:
+    +---+---+---+---+
+    | E | . |       |
+    +---+   +---+   +
+    |     .   . |   |
+    +   +---+   +---+
+    |       | .   S |
+    +---+---+---+---+
+ de ce fait on fait circuler un paramètre entre plusieurs fonctions.
+
 Etape 7: maze.generate()
-...
-...
-...
+on va generer le menu interatif pour que le true et false se fasse de maniere
+pour cela on va partir sur une nouvelle fonction :
+    des qu'on lance le menu, le chemin est cache
+    par la suite j'ai ajouter une boucle qui va tourner l'interface en continue
+    avec while True
+    voici la fonction creer :
+    def terminal_menu(maze) -> None:
+    show_path = False
+    while True:
+        display_maze(maze, show_path)
+        print()
+        print("[P] Afficher / masquer le chemin")
+        print("[R] Regenerer le labyrinthe")
+        print("[Q] Quitter")
+
+    puis je suis passer de la creation de l'algo du menu
+    choice = input("choix: ").strip().lower()
+
+        if choice == "p":
+            show_path = not show_path -> afficher/pas afficher (inverse show_path)
+        elif choice == "r":
+            maze.generate() -> generer maze
+        elif choice == "q":
+            break -> arrete le labirinthe (sprt du while)
+        else :
+            choix invalide
+
 
 -----------------------------------------------------
 TÂCHE 6 — DISPLAY
@@ -111,8 +159,8 @@ TÂCHE 6 — DISPLAY
 │   ├── murs N/E/S/W (fini)
 │   ├── entrée (fini)
 │   ├── sortie (fini)
-│   ├── chemin (on est ici)
-│   └── menu
+│   ├── chemin (fini)
+│   └── menu (on est ici)
 │
 └── 6B — Pygame
     ├── créer la fenêtre

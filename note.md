@@ -150,6 +150,131 @@ pour cela on va partir sur une nouvelle fonction :
         else :
             choix invalide
 
+Etape 8 : Verifier que Pygame peut ouvrir une fenetre
+    je creer un environnement ou j'installe pygame
+
+    code :
+    j'importe pygame -> car je veux utiliser la bibliotheque Pygame
+    sa me donne acces a : 
+        -   pygame.init() -> Initialise les differents modules dont j'ai besoin (le bouton on)
+        -   pygame.display...
+        -   pygame.event...
+        -   pygame.quit()
+
+    j'ai cree la ft run_pygame() -> None:
+    qui va gerer l'interface Pygame
+
+    on veut un ecran -> screen = pygame.display.set_mode((800, 600))
+    set_mode() cree la fenetre (lageur pixel sur hauteur pixel)
+
+    pygame.display.set_caption("A-Maze-ing") -> sa donne un titre a la fenetre
+    
+    je creer un booleen
+    running = True
+    - la fenetre continue a tourner
+    running False
+    - on doit fermer la fenetre
+
+    La boucle While
+    While Running est comme le while true dans le fichier terminal, juste que la 
+    c'est running.
+
+    Les events -> for event in pygame.event.get():
+    Pygame surveille ce que fait l'utilisateur
+        déplacer souris
+        cliquer
+        appuyer sur P
+        appuyer sur ESC
+        fermer la fenêtre
+        etc.
+    pygame.event.get() ->  recupere les events qui viennent de se produire
+    for event in pygame.event.get() -> Pour chaque événement reçu, regarde ce que c’est.
+
+    if event.type == pygame.QUIT:
+        detecter la fermeture -> quand l'utilisateur demande a fermer la  fenetre
+
+    pygame.quit()
+    dit a Pygame -> Tu peux arreter tes modules et fermer proprement 
+
+    screen.fill((30, 30, 30)) -> correspond au couleur (R,G,B) et chaque valeur va de 0 a 255
+
+    pygame.display.flip() -> dit a pygame:
+        - maintenant, affiche dans la fenetre ce que j'ai dessine sur screen
+
+    pygame.draw.line(
+    screen,            ← OÙ dessiner
+    (255,255,255),     ← COULEUR : blanc
+    (100,100),         ← DÉPART : x=100, y=100
+    (400,100),         ← ARRIVÉE : x=400, y=100
+    3                  ← ÉPAISSEUR : 3 pixels
+)
+
+Etape 9 : Calculer les tailles des cellules
+    (0,0) ─────────────────────→ x
+    │
+    │       (100,100) ─────────── (400,100)
+    │
+    │
+    ↓
+    y
+
+    Contrairement à un repère de maths classique, y augmente vers le bas.
+
+
+    Dans le fichier terminal, on etait partie sur sur les charactere + --- |
+    la cellule ressemblait a :
+    +---+
+    |   |
+    +---+
+
+    dans Pygame, on donne des mesure a la celule
+    par exemple size_cell = 50
+    pour une grille de 5 x 5 par exemple -> 5 x 50 de largeur et hauteur
+
+    Etape 10 : Convertir (x, y)
+    -> donc on va convertir les coordonnees du maze en pixels:
+    exemple :
+    cellule (0,0) → pixel (0,0)
+    cellule (1,0) → pixel (50,0)
+    cellule (2,0) → pixel (100,0)
+
+    la formule : 
+    pixel_x = x * SIZE_CELL
+    pixel_y = y * SIZE_CELL
+
+on part de ce qu'on a fait dans terminal 
+    for x in range(maze.width):
+        if maze.has_wall(x, y, "N"):
+            print("+---", end="")  |  pygame.draw.line(...)
+        else:                      |  
+            print("+   ", end="")  |  
+        print("+")                 |  
+
+
+comprendre les deplacements :
+                N
+
+    (pixel_x, pixel_y) ───────── (pixel_x + SIZE_CELL, pixel_y)
+            +--------------------------------+
+            |                                |
+        W |                                | E
+            |                                |
+            +--------------------------------+
+    (pixel_x, pixel_y + SIZE_CELL)    (pixel_x + SIZE_CELL,
+                                    pixel_y + SIZE_CELL)
+
+                S
+
+    -> L'OFFSET / MARGE
+        pixel_x = x * SIZE_CELL
+        pixel_y = y * SIZE_CELL
+
+        pixel_x = OFFSET_X + x * SIZE_CELL
+        pixel_y = OFFSET_Y + y * SIZE_CELL
+
+        EXEMPLE:offset_x = 50
+        0 + 0x50 = 0    | avant
+        50 + 0x50 = 50  | apres  on a 50 pixels de marge
 
 -----------------------------------------------------
 TÂCHE 6 — DISPLAY
@@ -160,13 +285,13 @@ TÂCHE 6 — DISPLAY
 │   ├── entrée (fini)
 │   ├── sortie (fini)
 │   ├── chemin (fini)
-│   └── menu (on est ici)
+│   └── menu (fini)
 │
 └── 6B — Pygame
-    ├── créer la fenêtre
-    ├── calculer taille des cellules
-    ├── convertir (x,y) → pixels
-    ├── dessiner les murs
+    ├── créer la fenêtre (fini)
+    ├── calculer taille des cellules (fini)
+    ├── convertir (x,y) → pixels (fini)
+    ├── dessiner les murs (on est ici)
     ├── afficher entrée/sortie
     ├── afficher le chemin
     ├── afficher le motif 42

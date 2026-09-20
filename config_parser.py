@@ -127,3 +127,4 @@ def convert_config(data: dict[str, str]) -> MazeConfig:
         perfect=perfect,
         seed=seed,
     )
+

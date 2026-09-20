@@ -9,4 +9,3 @@ OUTPUT_FILE=maze.txt
 PERFECT=True
 # meme seed = meme labyrinthe
 SEED=42
-

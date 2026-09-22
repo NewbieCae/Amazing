@@ -1638,9 +1638,717 @@ maze_pixel_width / maze_pixel_height
  ↓         ↓              ↓
 draw_cell  draw_path  draw_entry_exit
 
+🟦 ==================================================
+ÉTAPE 14 — BRANCHER PYGAME AU VRAI MAZEGENERATOR
 ==================================================
-ÉTAPE 14 — 
+
+OBJECTIF :
+
+Jusqu'ici, Pygame utilisait MockMaze.
+
+MockMaze était un faux labyrinthe utilisé uniquement pour développer
+et tester l'affichage sans dépendre du vrai générateur.
+
+On avait donc :
+
+MockMaze
+   ↓
+run_pygame()
+   ↓
+affichage Pygame
+
+
+Maintenant que l'affichage fonctionne, on veut utiliser le vrai
+MazeGenerator.
+
+On veut obtenir :
+
+MazeGenerator
+      ↓
+maze.generate()
+      ↓
+run_pygame(maze)
+      ↓
+affichage du vrai labyrinthe
+
+
+🟪 ==================================================
+1. COMPRENDRE MODULE / CLASSE / PACKAGE
 ==================================================
+
+Il faut distinguer trois choses :
+
+mazegen/                  → package Python
+│
+├── __init__.py
+│
+└── generator.py          → module Python
+        │
+        └── MazeGenerator → classe
+
+
+Donc :
+
+generator.py
+
+est le FICHIER.
+
+
+Alors que :
+
+MazeGenerator
+
+est la CLASSE contenue dans ce fichier.
+
+
+Notre architecture est donc :
+
+mazegen/
+├── __init__.py
+├── generator.py
+├── grid.py
+├── walls.py
+├── solver.py
+└── pattern42.py
+
+
+🟪 ==================================================
+2. EXPOSER MAZEGENERATOR DEPUIS LE PACKAGE
+==================================================
+
+Dans :
+
+mazegen/__init__.py
+
+on met :
+
+from .generator import MazeGenerator
+
+
+Le "." signifie :
+
+"cherche generator dans le package actuel"
+
+
+Donc :
+
+mazegen/
+│
+├── __init__.py
+│       ↓
+│   from .generator import MazeGenerator
+│
+└── generator.py
+        ↓
+    class MazeGenerator
+
+
+Cela permet ensuite d'écrire ailleurs :
+
+from mazegen import MazeGenerator
+
+
+ATTENTION :
+
+Dans __init__.py, il ne fallait PAS écrire :
+
+from mazegen import MazeGenerator
+
+car __init__.py aurait essayé d'importer MazeGenerator depuis
+le package mazegen alors que ce même package était encore en train
+d'être initialisé.
+
+Cela provoque un import circulaire.
+
+
+🟪 ==================================================
+3. VERIFIER QUE L'IMPORT FONCTIONNE
+==================================================
+
+On a testé :
+
+python -c "from mazegen import MazeGenerator; print(MazeGenerator)"
+
+
+Le terminal a retourné :
+
+<class 'mazegen.generator.MazeGenerator'>
+
+
+Cela signifie :
+
+mazegen
+   ↓
+__init__.py
+   ↓
+generator.py
+   ↓
+MazeGenerator
+
+fonctionne correctement.
+
+
+🟪 ==================================================
+4. REMPLACER MOCKMAZE PAR MAZEGENERATOR
+==================================================
+
+Avant, pygame_display.py utilisait :
+
+if __name__ == "__main__":
+    from mock_maze import MockMaze
+
+    maze = MockMaze()
+    run_pygame(maze)
+
+
+MockMaze servait uniquement à simuler l'interface du vrai labyrinthe.
+
+
+Maintenant, on utilise :
+
+from mazegen import MazeGenerator
+
+
+Puis on crée un vrai objet :
+
+maze = MazeGenerator(
+    width=20,
+    height=15,
+    entry=(0, 0),
+    exit=(19, 14),
+    perfect=True,
+    seed=42
+)
+
+
+IMPORTANT :
+
+MazeGenerator(...)
+
+crée l'OBJET.
+
+Mais cela ne génère pas encore le labyrinthe.
+
+
+On a donc trois étapes différentes :
+
+MazeGenerator(...)
+      ↓
+création de l'objet
+
+maze.generate()
+      ↓
+génération du labyrinthe
+
+run_pygame(maze)
+      ↓
+affichage du labyrinthe
+
+
+Le code de test devient donc :
+
+maze = MazeGenerator(
+    width=20,
+    height=15,
+    entry=(0, 0),
+    exit=(19, 14),
+    perfect=True,
+    seed=42
+)
+
+maze.generate()
+
+run_pygame(maze)
+
+
+🟪 ==================================================
+5. TESTER LE VRAI LABYRINTHE DANS PYGAME
+==================================================
+
+On lance :
+
+python -m display.pygame_display
+
+
+Le vrai labyrinthe 20 x 15 apparaît correctement.
+
+
+Cela permet de vérifier que :
+
+maze.width
+maze.height
+
+fonctionnent.
+
+
+Mais également que :
+
+maze.has_wall()
+
+est compatible avec notre fonction :
+
+draw_cell()
+
+
+On a donc :
+
+MazeGenerator
+      ↓
+has_wall(x, y, direction)
+      ↓
+draw_cell()
+      ↓
+murs affichés dans Pygame
+
+
+🟪 ==================================================
+6. TESTER LE CHEMIN AVEC P
+==================================================
+
+Quand on appuie sur P :
+
+show_path change de valeur.
+
+
+Puis :
+
+if show_path:
+    draw_path(...)
+
+
+draw_path() appelle :
+
+maze.find_path()
+
+
+Cette fois, ce n'est plus le chemin artificiel de MockMaze.
+
+C'est le vrai BFS du MazeGenerator.
+
+
+Le flux devient :
+
+P
+↓
+show_path = True
+↓
+draw_path()
+↓
+maze.find_path()
+↓
+BFS
+↓
+liste des cellules du chemin
+↓
+conversion cellules → pixels
+↓
+affichage du chemin entre E et S
+
+
+Le test fonctionne :
+
+P affiche correctement le chemin du vrai labyrinthe.
+
+
+🟪 ==================================================
+7. TESTER LA REGENERATION AVEC R
+==================================================
+
+Avec MockMaze :
+
+maze.generate()
+
+ne faisait rien car sa méthode generate() contenait seulement :
+
+pass
+
+
+Avec le vrai MazeGenerator :
+
+maze.generate()
+
+génère réellement un nouveau labyrinthe.
+
+
+Donc :
+
+R
+↓
+pygame.K_r
+↓
+maze.generate()
+↓
+nouveaux passages
+↓
+nouveau labyrinthe affiché
+
+
+Le test fonctionne.
+
+Le labyrinthe change lorsque l'on appuie sur R.
+
+
+Si on appuie ensuite sur P :
+
+maze.find_path()
+
+calcule le chemin correspondant au NOUVEAU labyrinthe.
+
+
+Donc :
+
+R → nouveau labyrinthe
+P → nouveau chemin
+
+
+🟪 ==================================================
+8. TESTER LE PROGRAMME PRINCIPAL
+==================================================
+
+Il ne suffisait pas de tester Pygame.
+
+Il fallait également vérifier que :
+
+a_maze_ing.py
+
+fonctionnait toujours avec la nouvelle organisation du package.
+
+
+a_maze_ing.py utilise :
+
+from mazegen import MazeGenerator
+
+
+On a donc lancé :
+
+python a_maze_ing.py config.txt
+
+
+Au premier test, une erreur est apparue :
+
+Erreur : ligne 1 mal formee :
+'from dataclasses import dataclass'
+
+
+Cette erreur ne venait PAS de MazeGenerator.
+
+
+Le problème venait de config.txt.
+
+
+🟪 ==================================================
+9. CORRIGER CONFIG.TXT
+==================================================
+
+config.txt contenait accidentellement du code Python provenant
+de config_parser.py.
+
+
+Or parse_config() attend le format :
+
+CLE=VALEUR
+
+
+On a donc remis :
+
+WIDTH=20
+HEIGHT=15
+ENTRY=0,0
+EXIT=19,14
+OUTPUT_FILE=maze.txt
+PERFECT=True
+SEED=42
+
+
+Le programme peut maintenant faire :
+
+config.txt
+    ↓
+parse_config()
+    ↓
+dictionnaire
+    ↓
+convert_config()
+    ↓
+MazeConfig
+    ↓
+MazeGenerator(...)
+
+
+🟪 ==================================================
+10. TESTER A_MAZE_ING.PY
+==================================================
+
+On relance :
+
+python a_maze_ing.py config.txt
+
+
+Aucune erreur n'est affichée.
+
+
+Cela signifie que :
+
+config.txt
+    ↓
+parse_config()
+    ↓
+convert_config()
+    ↓
+MazeGenerator(...)
+    ↓
+maze.generate()
+    ↓
+write_output()
+
+fonctionne.
+
+
+Le programme n'affiche pas forcément quelque chose dans le terminal.
+
+Son résultat principal est écrit dans :
+
+maze.txt
+
+
+🟪 ==================================================
+11. VERIFIER MAZE.TXT
+==================================================
+
+On utilise :
+
+head maze.txt
+
+
+Exemple obtenu :
+
+D539553955553D517913
+97C693C69553C53C56AA
+8153AC55695693A9556A
+AAD2C3979693AAC6957A
+...
+
+
+Chaque caractère représente une cellule du labyrinthe
+sous forme hexadécimale.
+
+
+Le flux complet fonctionne donc :
+
+MazeGenerator
+      ↓
+to_grid()
+      ↓
+valeur des murs
+      ↓
+conversion hexadécimale
+      ↓
+maze.txt
+
+
+🟪 ==================================================
+12. VERIFIER LE DOUBLON MAZEGEN.PY
+==================================================
+
+Pendant la migration, on avait conservé :
+
+mazegen.py
+
+à la racine comme sauvegarde.
+
+
+Et nous avions maintenant :
+
+mazegen/
+└── generator.py
+
+
+Avant de supprimer l'ancien fichier, on a vérifié qu'ils étaient
+strictement identiques avec :
+
+diff mazegen.py mazegen/generator.py
+
+
+La commande n'a rien retourné.
+
+
+Cela signifie :
+
+mazegen.py
+     │
+     │ diff
+     ▼
+mazegen/generator.py
+
+AUCUNE DIFFERENCE
+
+
+Donc generator.py contient bien l'intégralité de l'ancien code.
+
+
+🟪 ==================================================
+13. SUPPRIMER L'ANCIEN DOUBLON
+==================================================
+
+Une fois les tests terminés et le diff vérifié, l'ancien :
+
+mazegen.py
+
+a été supprimé.
+
+
+On conserve :
+
+mazegen/
+├── __init__.py
+├── generator.py
+├── grid.py
+├── walls.py
+├── solver.py
+└── pattern42.py
+
+
+Cela permet d'avoir un package organisé et réutilisable.
+
+
+🟪 ==================================================
+14. ARCHITECTURE FINALE DE L'IMPORT
+==================================================
+
+Quand on écrit :
+
+from mazegen import MazeGenerator
+
+
+Python suit maintenant :
+
+mazegen/
+   ↓
+__init__.py
+   ↓
+from .generator import MazeGenerator
+   ↓
+generator.py
+   ↓
+class MazeGenerator
+
+
+Puis :
+
+maze = MazeGenerator(...)
+        ↓
+création de l'objet
+
+maze.generate()
+        ↓
+génération
+
+maze.has_wall(...)
+        ↓
+lecture des murs
+
+maze.find_path()
+        ↓
+recherche du chemin
+
+maze.to_grid()
+        ↓
+représentation du labyrinthe
+
+
+🟪 ==================================================
+15. RESULTAT DE L'ETAPE 14
+==================================================
+
+Le vrai MazeGenerator est maintenant correctement connecté
+au reste du projet.
+
+
+PYGAME :
+
+Génération réelle              OK
+Affichage des murs             OK
+Entrée / sortie                OK
+P → afficher/masquer chemin    OK
+R → régénérer                  OK
+P après R → nouveau chemin     OK
+Q → quitter                    OK
+Taille adaptative              OK
+
+
+PROGRAMME PRINCIPAL :
+
+config.txt                     OK
+parse_config()                 OK
+convert_config()               OK
+MazeGenerator                  OK
+generate()                     OK
+write_output()                 OK
+maze.txt                       OK
+
+
+ARCHITECTURE :
+
+mazegen/
+   ↓
+generator.py
+   ↓
+MazeGenerator
+
+                              OK
+
+
+🟦 ==================================================
+RÉSUMÉ MENTAL
+==================================================
+
+Il faut surtout retenir la différence entre :
+
+PACKAGE
+mazegen/
+
+MODULE
+generator.py
+
+CLASSE
+MazeGenerator
+
+
+Et la différence entre :
+
+MazeGenerator(...)
+→ crée un objet
+
+maze.generate()
+→ génère le labyrinthe
+
+run_pygame(maze)
+→ affiche le labyrinthe
+
+
+FLUX GLOBAL :
+
+config.txt
+    ↓
+config_parser
+    ↓
+MazeConfig
+    ↓
+MazeGenerator
+    ↓
+generate()
+    ↓
+    ├──────────────→ Pygame
+    │                 ├─ has_wall()
+    │                 └─ find_path()
+    │
+    └──────────────→ maze.txt
+                      └─ to_grid()
+
+
+ÉTAPE 14 VALIDÉE ✅
+
+
 
 
 
@@ -1663,15 +2371,15 @@ TÂCHE 6 — DISPLAY
     ├── afficher entrée/sortie (fini)
     ├── afficher le chemin (on est ici)
     ├── afficher le motif 42
-    ├── gérer touches/clavier
-    └── régénérer le maze
+    ├── gérer touches/clavier (fini)
+    └── régénérer le maze (fini)
 
 
 
 mazegen/
 └── pattern42.py         ← TA tâche 7
 
-mazegen/generator.py     ← tâche 8 éventuellement
+mazegen/generator.py     ← (fini fait par le binome)
 mazegen/grid.py          ← tâche 9 éventuellement
 
 pyproject.toml           ← tâche 10

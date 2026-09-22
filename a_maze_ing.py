@@ -1,7 +1,7 @@
 import sys
 from config_parser import parse_config, convert_config, ConfigError
 from mazegen import MazeGenerator
-
+from mazegen.pattern42 import create_pattern42
 
 DELTA_TO_LETTER = {
     (0, -1): "N",
@@ -50,13 +50,16 @@ def main() -> None:
         file_config = sys.argv[1]
         dico_config = parse_config(file_config)
         maze_config = convert_config(dico_config)
+        blocked = create_pattern42(maze_config.width, maze_config.height)
+
         maze = MazeGenerator(
             width=maze_config.width,
             height=maze_config.height,
             entry=maze_config.entry,
             exit=maze_config.exit,
             perfect=maze_config.perfect,
-            seed=maze_config.seed
+            seed=maze_config.seed,
+            blocked=blocked
         )
         maze.generate()
         write_output(maze, maze_config.output_file)

@@ -1,5 +1,6 @@
 import random
 from collections import deque
+
 Cell = tuple[int, int]
 
 MOVES = {

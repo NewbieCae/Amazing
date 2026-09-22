@@ -1,4 +1,5 @@
-from mock_maze import MockMaze
+from mazegen import MazeGenerator
+from mazegen.pattern42 import create_pattern42
 
 def display_maze(maze, show_path: bool = False) -> None:
     """Affiche le labyrinthe dans le terminal."""
@@ -64,5 +65,25 @@ def terminal_menu(maze) -> None:
             print("Choix invalide")
 
 if __name__ == "__main__":
-    maze = MockMaze()
+    blocked = create_pattern42(20, 15)
+
+    maze = MazeGenerator(
+        width=20,
+        height=15,
+        entry=(0,0),
+        exit=(19,14),
+        perfect=False,
+        seed=10,
+        blocked=blocked
+    )
+
+    maze.generate()
+    dead_ends = 0
+    for y in range(maze.height):
+        for x in range(maze.width):
+            if maze._open_count(x,y) == 1:
+                dead_ends += 1
+    print("dead ends:", dead_ends)
+    print("open 3x3:", maze._has_open_3x3())
     terminal_menu(maze)
+    

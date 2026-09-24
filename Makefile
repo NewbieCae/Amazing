@@ -46,9 +46,9 @@ lint-strict:
 test:
 	$(PYTHON) -m pytest -v
 
-## build : construit le package mazegen-* (.whl et .tar.gz)
+## build : construit le package mazegen-* (.whl)
 build:
-	$(PYTHON) -m build
+	$(PYTHON) -m build --wheel --outdir .
 
 ## clean : supprime les caches et fichiers temporaires
 clean:

@@ -1291,9 +1291,9 @@ mais un autre appel plus loin dans le programme
 peut annuler son effet.
 
 
-==================================================
+=======================================================
 ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
-==================================================
+=======================================================
 
 OBJECTIF :
 
@@ -1638,7 +1638,7 @@ maze_pixel_width / maze_pixel_height
  ↓         ↓              ↓
 draw_cell  draw_path  draw_entry_exit
 
-🟦 ==================================================
+==================================================
 ÉTAPE 14 — BRANCHER PYGAME AU VRAI MAZEGENERATOR
 ==================================================
 
@@ -1672,7 +1672,7 @@ run_pygame(maze)
 affichage du vrai labyrinthe
 
 
-🟪 ==================================================
+==================================================
 1. COMPRENDRE MODULE / CLASSE / PACKAGE
 ==================================================
 
@@ -1712,7 +1712,7 @@ mazegen/
 └── pattern42.py
 
 
-🟪 ==================================================
+==================================================
 2. EXPOSER MAZEGENERATOR DEPUIS LE PACKAGE
 ==================================================
 
@@ -1761,7 +1761,7 @@ d'être initialisé.
 Cela provoque un import circulaire.
 
 
-🟪 ==================================================
+==================================================
 3. VERIFIER QUE L'IMPORT FONCTIONNE
 ==================================================
 
@@ -1788,7 +1788,7 @@ MazeGenerator
 fonctionne correctement.
 
 
-🟪 ==================================================
+==================================================
 4. REMPLACER MOCKMAZE PAR MAZEGENERATOR
 ==================================================
 
@@ -1861,7 +1861,7 @@ maze.generate()
 run_pygame(maze)
 
 
-🟪 ==================================================
+==================================================
 5. TESTER LE VRAI LABYRINTHE DANS PYGAME
 ==================================================
 
@@ -1901,7 +1901,7 @@ draw_cell()
 murs affichés dans Pygame
 
 
-🟪 ==================================================
+==================================================
 6. TESTER LE CHEMIN AVEC P
 ==================================================
 
@@ -1950,7 +1950,7 @@ Le test fonctionne :
 P affiche correctement le chemin du vrai labyrinthe.
 
 
-🟪 ==================================================
+==================================================
 7. TESTER LA REGENERATION AVEC R
 ==================================================
 
@@ -2001,7 +2001,7 @@ R → nouveau labyrinthe
 P → nouveau chemin
 
 
-🟪 ==================================================
+==================================================
 8. TESTER LE PROGRAMME PRINCIPAL
 ==================================================
 
@@ -2036,7 +2036,7 @@ Cette erreur ne venait PAS de MazeGenerator.
 Le problème venait de config.txt.
 
 
-🟪 ==================================================
+==================================================
 9. CORRIGER CONFIG.TXT
 ==================================================
 
@@ -2075,7 +2075,7 @@ MazeConfig
 MazeGenerator(...)
 
 
-🟪 ==================================================
+==================================================
 10. TESTER A_MAZE_ING.PY
 ==================================================
 
@@ -2111,7 +2111,7 @@ Son résultat principal est écrit dans :
 maze.txt
 
 
-🟪 ==================================================
+==================================================
 11. VERIFIER MAZE.TXT
 ==================================================
 
@@ -2146,7 +2146,7 @@ conversion hexadécimale
 maze.txt
 
 
-🟪 ==================================================
+==================================================
 12. VERIFIER LE DOUBLON MAZEGEN.PY
 ==================================================
 
@@ -2186,7 +2186,7 @@ AUCUNE DIFFERENCE
 Donc generator.py contient bien l'intégralité de l'ancien code.
 
 
-🟪 ==================================================
+==================================================
 13. SUPPRIMER L'ANCIEN DOUBLON
 ==================================================
 
@@ -2211,7 +2211,7 @@ mazegen/
 Cela permet d'avoir un package organisé et réutilisable.
 
 
-🟪 ==================================================
+==================================================
 14. ARCHITECTURE FINALE DE L'IMPORT
 ==================================================
 
@@ -2256,7 +2256,7 @@ maze.to_grid()
 représentation du labyrinthe
 
 
-🟪 ==================================================
+==================================================
 15. RESULTAT DE L'ETAPE 14
 ==================================================
 
@@ -2298,7 +2298,7 @@ MazeGenerator
                               OK
 
 
-🟦 ==================================================
+==================================================
 RÉSUMÉ MENTAL
 ==================================================
 
@@ -2348,7 +2348,736 @@ generate()
 
 ÉTAPE 14 VALIDÉE ✅
 
+=======================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+=======================================================
+ÉTAPE 15 — CRÉER LE MOTIF "42" DANS LE LABYRINTHE
 
+Objectif :
+Créer un motif "42" composé de cellules complètement fermées.
+
+Fichier :
+mazegen/pattern42.py
+
+On représente le motif avec des coordonnées locales.
+
+PATTERN_WIDTH = 7
+PATTERN_HEIGHT = 5
+
+Le motif ressemble à :
+
+#.#.###
+#.#...#
+###.###
+..#.#..
+..#.###
+
+Chaque # représente une cellule bloquée.
+
+Les coordonnées sont d'abord locales au motif :
+
+(0,0), (2,0), etc.
+
+Puis on transforme ces coordonnées locales en coordonnées du labyrinthe :
+
+global_x = local_x + offset_x
+global_y = local_y + offset_y
+
+Le résultat est stocké dans un set :
+
+pattern = set()
+
+Pourquoi un set ?
+
+- une cellule ne doit apparaître qu'une fois
+- la recherche "est-ce que cette cellule est bloquée ?" est rapide
+
+La fonction :
+
+create_pattern42(width, height)
+
+renvoie donc :
+
+set[tuple[int, int]]
+
+Exemple :
+
+blocked = create_pattern42(20, 15)
+
+Si le labyrinthe est trop petit pour contenir le motif :
+
+return set()
+
+et un message est affiché dans le terminal.
+
+=======================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+=======================================================
+🟦 ÉTAPE 16 — INTÉGRER LE MOTIF 42 DANS MAZEGENERATOR
+
+Objectif :
+Faire comprendre au générateur que certaines cellules sont interdites.
+
+MazeGenerator possède maintenant :
+
+blocked: set[Cell] | None = None
+
+Puis :
+
+self.blocked = blocked if blocked is not None else set()
+
+Donc :
+
+blocked
+   ↓
+ensemble des cellules du 42
+   ↓
+MazeGenerator
+   ↓
+ne crée pas de passages vers ces cellules
+
+Dans _neighbors(), on ignore une cellule si :
+
+(vx, vy) in self.blocked
+
+Le principe est :
+
+cellule normale
+    ↓
+peut être visitée
+
+cellule du 42
+    ↓
+ignorée par la génération
+    ↓
+aucun passage créé
+    ↓
+4 murs fermés
+
+Dans a_maze_ing.py :
+
+blocked = create_pattern42(
+    maze_config.width,
+    maze_config.height
+)
+
+Puis on transmet ce résultat au constructeur :
+
+MazeGenerator(
+    ...
+    blocked=blocked
+)
+
+Ainsi le motif 42 fait maintenant partie de la vraie génération.
+
+=======================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+=======================================================
+🟦 ÉTAPE 17 — CORRIGER LE POSITIONNEMENT DU 42
+
+Problème rencontré :
+
+En mode PERFECT=False, MazeGenerator ouvre spécialement :
+
+- les quatre coins
+- le centre du labyrinthe
+
+Au départ, le chiffre 2 passait sur la cellule centrale.
+
+Conséquence :
+
+le générateur pouvait ouvrir une cellule appartenant au "2"
+et casser le motif.
+
+Solution :
+
+décaler horizontalement le motif pour que le centre du labyrinthe
+tombe dans l'espace entre le 4 et le 2.
+
+On utilise :
+
+offset_x = width // 2 - 3
+offset_y = (height - PATTERN_HEIGHT) // 2
+
+Exemple pour 20 × 15 :
+
+offset_x = 20 // 2 - 3
+         = 10 - 3
+         = 7
+
+offset_y = (15 - 5) // 2
+         = 5
+
+Une cellule locale :
+
+(2, 0)
+
+devient :
+
+(2 + 7, 0 + 5)
+= (9, 5)
+
+Important :
+
+x utilise offset_x
+y utilise offset_y
+
+=======================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+=======================================================
+🟦 ÉTAPE 18 — TESTER LE MOTIF 42
+
+Fichier :
+
+tests/test_pattern42.py
+
+Objectif :
+Vérifier que les cellules constituant le 42 restent complètement fermées.
+
+On teste plusieurs générations :
+
+for seed in range(100):
+
+Cela donne :
+
+seed = 0
+seed = 1
+...
+seed = 99
+
+Pour chaque génération :
+
+1. création du motif
+2. création du MazeGenerator
+3. génération du labyrinthe
+4. vérification des murs des cellules bloquées
+
+Pour chaque cellule du motif :
+
+for x, y in blocked:
+
+On teste les quatre directions :
+
+for direction in MOVES:
+
+Puis :
+
+assert maze.has_wall(x, y, direction) is True
+
+Rappel :
+
+assert condition
+
+signifie :
+
+condition vraie
+    ↓
+le programme continue
+
+condition fausse
+    ↓
+AssertionError
+
+"assert" est un mot-clé Python.
+Ce n'est pas une fonction et il n'y a rien à importer.
+
+On teste aussi un labyrinthe trop petit :
+
+small_pattern = create_pattern42(5, 4)
+assert small_pattern == set()
+
+Commande correcte depuis la racine :
+
+python3 -m tests.test_pattern42
+
+Attention :
+
+python -m attend un NOM DE MODULE.
+
+Donc :
+
+python3 -m tests.test_pattern42     ✅
+
+et pas :
+
+python3 -m tests.test_pattern42.py  ❌
+
+=======================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+=======================================================
+🟦 ÉTAPE 19 — TESTER LE MODE PAC-MAN / PERFECT=FALSE
+
+Fichier :
+
+tests/test_pacman.py
+
+Objectif :
+Tester automatiquement plusieurs propriétés du labyrinthe imparfait.
+
+On génère 100 labyrinthes avec :
+
+for seed in range(100):
+
+et :
+
+perfect=False
+
+On vérifie notamment :
+
+- peu de dead ends
+- aucune zone complètement ouverte de 3 × 3
+- toutes les cellules accessibles sont connectées
+
+IMPORTANT :
+
+La limite :
+
+dead_ends <= 3
+
+est notre critère de test pour l'implémentation actuelle.
+
+Ce n'est pas une valeur imposée explicitement par le sujet.
+
+===================================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+===================================================================
+🟦 ÉTAPE 20 — COMPRENDRE ET UTILISER BFS POUR TESTER LA CONNECTIVITÉ
+
+Objectif :
+Vérifier qu'on peut atteindre toutes les cellules navigables du labyrinthe.
+
+On commence à l'entrée :
+
+visited = {maze.entry}
+
+visited contient les cellules déjà découvertes.
+
+Puis :
+
+queue = deque([maze.entry])
+
+queue contient les cellules qu'il reste à explorer.
+
+Fonctionnement :
+
+queue
+ ↓
+prendre la première cellule
+ ↓
+regarder ses voisins accessibles
+ ↓
+ajouter les nouveaux voisins
+ ↓
+continuer jusqu'à ce que queue soit vide
+
+On retire la première cellule avec :
+
+current = queue.popleft()
+
+Puis :
+
+x, y = current
+
+C'est du tuple unpacking.
+
+Si :
+
+current = (4, 7)
+
+alors :
+
+x = 4
+y = 7
+
+Pour chaque direction :
+
+for direction in MOVES:
+
+direction vaut par exemple :
+
+"N"
+"E"
+"S"
+"W"
+
+MOVES est un dictionnaire.
+
+Donc pour récupérer le déplacement :
+
+dx, dy = MOVES[direction]
+
+Exemple :
+
+direction = "E"
+
+MOVES["E"]
+    ↓
+(1, 0)
+
+Puis :
+
+neighbor = (x + dx, y + dy)
+
+Si ce voisin n'a jamais été découvert :
+
+if neighbor not in visited:
+    visited.add(neighbor)
+    queue.append(neighbor)
+
+Différence importante :
+
+set     → .add()
+list    → .append()
+deque   → .append()
+
+On ne fait pas :
+
+visited += neighbor
+
+car un set n'utilise pas + pour ajouter un élément.
+
+À la fin :
+
+expected = maze.width * maze.height - len(blocked)
+
+Puis :
+
+assert len(visited) == expected
+
+Cela vérifie que toutes les cellules qui ne font pas partie du 42
+sont accessibles.
+
+=======================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+=======================================================
+🟦 ÉTAPE 21 — TESTER LA CONTRAINTE 3 × 3
+
+Le mode imparfait peut créer des boucles.
+
+Mais on ne veut pas créer une grande zone complètement ouverte
+de 3 cellules × 3 cellules.
+
+MazeGenerator possède :
+
+_has_open_3x3()
+
+Le test utilise :
+
+assert maze._has_open_3x3() is False
+
+Attention à la différence :
+
+maze._has_open_3x3
+
+= référence vers la méthode
+
+maze._has_open_3x3()
+
+= exécute réellement la méthode
+
+Les parenthèses () sont donc importantes.
+
+Le test Pac-Man complet est lancé avec :
+
+python3 -m tests.test_pacman
+
+Aucune sortie + aucune AssertionError
+= tous les tests sont passés.
+
+=======================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+=======================================================
+🟦 ÉTAPE 22 — TRANSFORMER MAZEGEN EN PACKAGE PYTHON
+
+Objectif :
+Rendre MazeGenerator réutilisable depuis un autre projet.
+
+Architecture :
+
+mazegen/
+├── __init__.py
+├── generator.py
+├── pattern42.py
+├── grid.py
+├── solver.py
+└── walls.py
+
+generator.py contient notamment :
+
+MazeGenerator
+
+Le fichier :
+
+mazegen/__init__.py
+
+permet d'exposer la classe avec :
+
+from .generator import MazeGenerator
+
+Le point signifie :
+
+depuis le package actuel "mazegen"
+    ↓
+va dans generator.py
+    ↓
+importe MazeGenerator
+
+Cela permet ensuite à l'utilisateur d'écrire simplement :
+
+from mazegen import MazeGenerator
+
+au lieu de :
+
+from mazegen.generator import MazeGenerator
+
+=======================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+=======================================================
+🟦 ÉTAPE 23 — CRÉER LE PYPROJECT.TOML
+
+Objectif :
+Expliquer aux outils Python comment construire le package mazegen.
+
+Contenu :
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mazegen"
+version = "0.1.0"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+include = ["mazegen*"]
+
+[build-system]
+
+décrit le système utilisé pour construire le package.
+
+requires = ["setuptools"]
+
+indique que setuptools est nécessaire.
+
+build-backend = "setuptools.build_meta"
+
+indique à Python que setuptools effectue réellement la construction.
+
+[project]
+
+contient les informations du package.
+
+name = "mazegen"
+
+nom du package.
+
+version = "0.1.0"
+
+version actuelle.
+
+requires-python = ">=3.10"
+
+le package nécessite Python 3.10 minimum.
+
+Pourquoi ?
+
+Le code utilise notamment :
+
+int | None
+
+Cette syntaxe nécessite Python 3.10+.
+
+Enfin :
+
+[tool.setuptools.packages.find]
+include = ["mazegen*"]
+
+signifie :
+
+cherche les packages Python
+        ↓
+mais conserve uniquement
+        ↓
+mazegen
+et ses éventuels sous-packages
+
+Lors du test automatique avec find_packages(),
+setuptools trouvait :
+
+['mazegen', 'display']
+
+On ne voulait pas embarquer display dans le package réutilisable.
+
+include = ["mazegen*"]
+
+permet donc d'exclure display.
+
+=======================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+=======================================================
+🟦 ÉTAPE 24 — CONSTRUIRE LE FICHIER .WHL
+
+Objectif :
+Créer la version distribuable du package.
+
+On utilise :
+
+python3 -m build --wheel --outdir .
+
+Décomposition :
+
+python3 -m build
+    ↓
+exécute l'outil Python "build"
+
+--wheel
+    ↓
+construit un package .whl
+
+--outdir .
+    ↓
+place le résultat dans le dossier actuel
+
+Résultat :
+
+mazegen-0.1.0-py3-none-any.whl
+
+Le fichier .whl est le package distribuable.
+
+On a ensuite inspecté son contenu avec :
+
+python3 -m zipfile -l mazegen-0.1.0-py3-none-any.whl
+
+Le package contient bien notamment :
+
+mazegen/__init__.py
+mazegen/generator.py
+mazegen/pattern42.py
+
+Et il ne contient pas :
+
+display/
+tests/
+
+Donc notre configuration setuptools fonctionne correctement.
+
+===========================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+===========================================================
+🟦 ÉTAPE 25 — TESTER LE PACKAGE DANS UN ENVIRONNEMENT PROPRE
+
+Objectif :
+Ne pas seulement vérifier que le .whl se construit.
+
+On veut vérifier qu'une autre personne peut réellement :
+
+1. récupérer le .whl
+2. l'installer
+3. importer MazeGenerator
+
+On crée un environnement temporaire :
+
+python3 -m venv /tmp/test_mazegen
+
+Puis on installe notre package dedans :
+
+/tmp/test_mazegen/bin/python -m pip install ./mazegen-0.1.0-py3-none-any.whl
+
+Résultat :
+
+Successfully installed mazegen-0.1.0
+
+Ensuite on teste l'import depuis /tmp pour éviter que Python
+utilise accidentellement notre dossier source local :
+
+cd /tmp && /tmp/test_mazegen/bin/python -c "from mazegen import MazeGenerator; print(MazeGenerator)"
+
+Résultat :
+
+<class 'mazegen.generator.MazeGenerator'>
+
+Donc le package installé fonctionne réellement.
+
+Rappel sur -c :
+
+python -c "..."
+
+signifie :
+
+exécute directement le code Python écrit entre guillemets.
+
+Cela évite de créer un fichier .py juste pour faire un petit test.
+
+Chaîne complète validée :
+
+code source
+    ↓
+pyproject.toml
+    ↓
+build
+    ↓
+mazegen-0.1.0-py3-none-any.whl
+    ↓
+installation dans un environnement propre
+    ↓
+from mazegen import MazeGenerator
+    ↓
+fonctionne ✅
+
+=======================================================
+ÉTAPE 13 — ADAPTER LA TAILLE DES CELLULES AU LABYRINTHE
+=======================================================
+🟦 ÉTAPE 26 — AJOUTER UNE LICENCE AU PROJET
+
+Le sujet demande que le générateur puisse être réutilisé et distribué
+dans de futurs projets.
+
+Nous avons choisi :
+
+MIT License
+
+Pourquoi ?
+
+Elle permet notamment :
+
+- utiliser le code
+- copier le code
+- modifier le code
+- intégrer le code dans un autre projet
+- publier le code
+- distribuer le code
+
+Les auteurs indiqués sont :
+
+celfofan
+mcheddad
+
+Début du fichier LICENSE.md :
+
+MIT License
+
+Copyright (c) 2026 celfofan and mcheddad
+
+La licence impose principalement de conserver :
+
+- la notice de copyright
+- la notice de permission
+
+Elle précise également que le logiciel est fourni "AS IS",
+c'est-à-dire sans garantie.
+
+Cela répond à l'objectif du sujet :
+
+mazegen
+    ↓
+peut être réutilisé
+    ↓
+peut être modifié
+    ↓
+peut être distribué
+    ↓
+dans les projets suivants
 
 
 
@@ -2369,22 +3098,24 @@ TÂCHE 6 — DISPLAY
     ├── convertir (x,y) → pixels (fini)
     ├── dessiner les murs (fini)
     ├── afficher entrée/sortie (fini)
-    ├── afficher le chemin (on est ici)
-    ├── afficher le motif 42
+    ├── afficher le chemin (fini)
+    ├── afficher le motif 42 (fini)
     ├── gérer touches/clavier (fini)
     └── régénérer le maze (fini)
 
 
 
 mazegen/
-└── pattern42.py         ← TA tâche 7
+└── pattern42.py         ← TA tâche 7 (fini)
+tests/test_pacaman.py    ← (fini)
+tests/test_pattern42.py  ← (fini)
 
 mazegen/generator.py     ← (fini fait par le binome)
-mazegen/grid.py          ← tâche 9 éventuellement
+mazegen/grid.py          ← tâche 9 éventuellement (a faire)
 
-pyproject.toml           ← tâche 10
-README.md                ← tâche 12
-LICENSE.md               ← tâche 11
+pyproject.toml           ← tâche 10 (fini)
+README.md                ← tâche 12 (a faire)
+LICENSE.md               ← tâche 11 (fini)
 
 terminal.py
     │

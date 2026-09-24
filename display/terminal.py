@@ -1,7 +1,8 @@
 from mazegen import MazeGenerator
 from mazegen.pattern42 import create_pattern42
 
-def display_maze(maze, show_path: bool = False) -> None:
+
+def display_maze(maze: MazeGenerator, show_path: bool = False) -> None:
     """Affiche le labyrinthe dans le terminal."""
     for y in range(maze.height):
 
@@ -30,20 +31,22 @@ def display_maze(maze, show_path: bool = False) -> None:
     print("+")
 
 
-def cell_entry_exit(maze, x: int, y:int, show_path: bool = False) -> str:
+def cell_entry_exit(maze: MazeGenerator, x: int, y: int,
+                    show_path: bool = False) -> str:
+
     path = maze.find_path()
 
     if (x, y) == maze.entry:
-        return " E "
-    elif (x,y) == maze.exit:
         return " S "
+    elif (x, y) == maze.exit:
+        return " E "
     elif show_path and path and (x, y) in path:
         return " . "
     else:
         return "   "
 
 
-def terminal_menu(maze) -> None:
+def terminal_menu(maze: MazeGenerator) -> None:
     show_path = False
 
     while True:
@@ -64,14 +67,15 @@ def terminal_menu(maze) -> None:
         else:
             print("Choix invalide")
 
+
 if __name__ == "__main__":
     blocked = create_pattern42(20, 15)
 
     maze = MazeGenerator(
         width=20,
         height=15,
-        entry=(0,0),
-        exit=(19,14),
+        entry=(0, 0),
+        exit=(19, 14),
         perfect=False,
         seed=10,
         blocked=blocked
@@ -81,9 +85,8 @@ if __name__ == "__main__":
     dead_ends = 0
     for y in range(maze.height):
         for x in range(maze.width):
-            if maze._open_count(x,y) == 1:
+            if maze._open_count(x, y) == 1:
                 dead_ends += 1
     print("dead ends:", dead_ends)
     print("open 3x3:", maze._has_open_3x3())
     terminal_menu(maze)
-    

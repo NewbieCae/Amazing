@@ -2,6 +2,8 @@ import sys
 from config_parser import parse_config, convert_config, ConfigError
 from mazegen import MazeGenerator
 from mazegen.pattern42 import create_pattern42
+from display.pygame_display import run_pygame
+
 
 DELTA_TO_LETTER = {
     (0, -1): "N",
@@ -63,6 +65,7 @@ def main() -> None:
         )
         maze.generate()
         write_output(maze, maze_config.output_file)
+        run_pygame(maze)
     except ConfigError as e:
         print(f"Erreur : {e}", file=sys.stderr)
         sys.exit(1)
@@ -70,3 +73,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

@@ -1,54 +1,278 @@
-*This activity has been created as part of the 42 curriculum by celfofan and mcheddad*
-# A-Maze-ing
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Press+Start+2P&size=18&pause=1000&color=BB00FF&center=true&vCenter=true&width=900&lines=INITIALIZING+A-MAZE-ING...;GENERATING+MAZE...;CALCULATING+SHORTEST+PATH...;MAZE+SYSTEM+READY..."/>
+</p>
 
-A-Maze-ing is a maze generation project developed as part of the 42 curriculum.
+<p align="center">
+  <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0F0F1A&height=180&section=header&text=A-Maze-ing&fontColor=C77DFF&fontSize=45&animation=fadeIn"/>
+</p>
 
-The program generates configurable mazes, exports them using hexadecimal wall encoding, computes the shortest path between an entry and an exit, and provides terminal and Pygame visualizations.
+<p align="center">
+  <img src="https://img.shields.io/badge/language-Python-6A0DAD?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/algorithm-DFS%20%2B%20BFS-6A0DAD?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/visualization-Terminal%20%2B%20Pygame-6A0DAD?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/project-42-6A0DAD?style=for-the-badge" />
+</p>
 
-The project also includes:
+```txt
+[ SYSTEM BOOT ]
 
-- perfect and imperfect maze generation;
-- a visible `42` pattern made of fully closed cells;
-- a Pac-Man-inspired imperfect mode;
-- shortest-path computation;
-- an interactive graphical interface;
+CONFIG PARSER            [OK]
+MAZE GENERATOR           [OK]
+42 PATTERN               [OK]
+DFS ENGINE               [OK]
+BFS PATHFINDER           [OK]
+HEX ENCODER              [OK]
+TERMINAL DISPLAY         [OK]
+PYGAME DISPLAY           [OK]
+MAZEGEN PACKAGE          [OK]
+
+> A-Maze-ing READY
+```
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+<p align="center">
+
+<i>Generating configurable mazes, finding the shortest path and turning algorithms into interactive visualizations.</i>
+
+</p>
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<div align="center">
+
+`CONFIG → DFS GENERATION → 42 PATTERN → PERFECT / PAC-MAN MODE → BFS → HEX OUTPUT → DISPLAY`
+
+</div>
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+## DESCRIPTION
+
+*A-Maze-ing* is a maze generation project developed as part of the **42 curriculum**.
+
+The program generates configurable mazes, exports them using hexadecimal wall encoding, computes the shortest path between an entry and an exit, and provides a choice between interactive **Terminal** and **Pygame** visualizations.
+
+The project includes:
+
+- perfect maze generation;
+- imperfect / Pac-Man-inspired maze generation;
+- randomized iterative DFS;
+- BFS shortest-path computation;
+- a visible `42` pattern;
+- hexadecimal wall encoding;
+- reproducible generation using seeds;
+- interactive Terminal visualization;
+- interactive Pygame visualization;
 - a reusable Python package named `mazegen`.
 
----
+<div align="center">
 
-## Features
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
 
-### Maze generation
+</div>
 
-The maze generator supports configurable:
+<img src="https://img.shields.io/badge/OBJECTIVES-6A0DAD?style=for-the-badge" />
 
-- width and height;
-- entry and exit coordinates;
-- random seed;
-- perfect or imperfect generation mode;
-- output file.
+The purpose of this project is to understand and implement:
 
-### Perfect mode
+- maze generation algorithms;
+- graph traversal;
+- Depth-First Search;
+- Breadth-First Search;
+- pathfinding;
+- seeded random generation;
+- bitwise wall representation;
+- configuration parsing;
+- data validation;
+- Python packaging;
+- reusable software architecture;
+- terminal rendering;
+- graphical rendering;
+- automated testing;
+- static typing and linting.
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/MAZE PIPELINE-6A0DAD?style=for-the-badge" />
+
+<div align="center">
+
+```txt
+┌─────────────────────┐
+│     config.txt      │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│   Config Parser     │
+│ parse + validation  │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│    MazeGenerator    │
+│ randomized DFS      │
+└──────────┬──────────┘
+           │
+           ├───────────────┐
+           │               │
+           ▼               ▼
+┌────────────────┐  ┌────────────────┐
+│ PERFECT=True   │  │ PERFECT=False  │
+│ perfect maze   │  │ Pac-Man mode   │
+└───────┬────────┘  └───────┬────────┘
+        │                   │
+        └─────────┬─────────┘
+                  │
+                  ▼
+        ┌───────────────────┐
+        │   BFS Pathfinder  │
+        │   shortest path   │
+        └─────────┬─────────┘
+                  │
+          ┌───────┴─────────┐
+          ▼                 ▼
+┌──────────────────┐  ┌──────────────────┐
+│ Hexadecimal File │  │ Visual Display   │
+│ maze.txt         │  │ Terminal/Pygame  │
+└──────────────────┘  └──────────────────┘
+```
+
+</div>
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/KEY CONCEPT-MAZE GENERATION-6A0DAD?style=for-the-badge" />
+
+### 📌 Randomized Depth-First Search
+
+The main maze generation algorithm is a randomized iterative **Depth-First Search (DFS)**.
+
+Generation starts from the configured entry cell.
+
+```txt
+ENTRY
+  ↓
+Find unvisited neighbors
+  ↓
+Choose random neighbor
+  ↓
+Open passage
+  ↓
+Push neighbor to stack
+  ↓
+Continue exploring
+  ↓
+No neighbor?
+  ↓
+Backtrack
+  ↓
+MAZE GENERATED
+```
+
+The algorithm:
+
+1. starts at the entry;
+2. finds neighboring cells that have not been visited;
+3. ignores cells belonging to the `42` pattern;
+4. randomly selects an available neighbor;
+5. opens a passage between both cells;
+6. pushes the new cell onto the stack;
+7. backtracks when no neighbor is available;
+8. continues until all reachable cells have been explored.
+
+The implementation is **iterative** instead of recursive, avoiding dependence on Python's recursion depth for larger mazes.
+
+A seeded `random.Random` instance is used so that generation can be reproduced.
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+### 📌 Why DFS?
+
+Randomized DFS naturally creates a connected spanning structure while exploring the maze.
+
+In perfect mode, avoiding connections to already visited cells prevents cycles during the initial generation.
+
+It is also easy to extend.
+
+In imperfect mode, additional passages can be opened after DFS generation to introduce loops and reduce dead ends.
+
+```txt
+DFS
+ │
+ ├── PERFECT=True  → keep tree structure
+ │
+ └── PERFECT=False → open additional passages
+```
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/PERFECT MODE-6A0DAD?style=for-the-badge" />
 
 With:
 
-```text
+```txt
 PERFECT=True
 ```
 
-the generator creates the maze using a randomized iterative Depth-First Search.
+the generator creates a perfect maze using randomized iterative DFS.
 
-The resulting maze contains a unique path between accessible cells, except for the cells reserved for the `42` pattern.
+The resulting accessible maze contains a unique path between cells, except for the cells reserved for the closed `42` pattern.
 
-### Imperfect / Pac-Man mode
+```txt
+PERFECT=True
+
+DFS
+ ↓
+Connected maze
+ ↓
+No additional passages
+ ↓
+No cycles introduced
+ ↓
+Unique path
+```
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/PAC--MAN MODE-6A0DAD?style=for-the-badge" />
 
 With:
 
-```text
+```txt
 PERFECT=False
 ```
 
-the maze is first generated using DFS and is then modified to introduce additional passages.
+the maze is first generated using DFS and then modified to introduce additional passages.
 
 The imperfect mode:
 
@@ -56,17 +280,36 @@ The imperfect mode:
 - introduces loops;
 - opens the four corners and the center when possible;
 - prevents fully open `3x3` areas;
-- preserves the closed cells forming the `42` pattern.
+- preserves the closed cells forming the `42` pattern;
+- keeps the maze connected.
 
----
+```txt
+DFS MAZE
+   ↓
+OPEN EXTRA PASSAGES
+   ↓
+REDUCE DEAD ENDS
+   ↓
+CREATE LOOPS
+   ↓
+CHECK 3x3 AREAS
+   ↓
+PAC-MAN STYLE MAZE
+```
 
-## The `42` Pattern
+<div align="center">
 
-A visible `42` is created inside the maze using blocked cells.
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/42 PATTERN-BB00FF?style=for-the-badge" />
+
+A visible `42` is created inside the maze using fully blocked cells.
 
 The pattern occupies a `7x5` area:
 
-```text
+```txt
 #.#.###
 #.#...#
 ###.###
@@ -78,104 +321,126 @@ Each `#` represents a fully closed cell.
 
 These cells are excluded from maze generation so that no passage can cross the pattern.
 
+```txt
+NORMAL CELL → maze generation allowed
+
+42 CELL     → █████
+              CLOSED
+              NO PASSAGE
+```
+
 If the maze is smaller than the minimum size required for the pattern, the pattern is omitted and a message is printed.
 
----
+<div align="center">
 
-## Maze Generation Algorithm
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
 
-The main maze generation algorithm is a randomized iterative **Depth-First Search (DFS)**.
+</div>
 
-Generation starts from the configured entry cell.
-
-The algorithm keeps a stack of visited cells:
-
-1. Start at the entry.
-2. Find neighboring cells that have not yet been visited.
-3. Ignore cells belonging to the `42` pattern.
-4. Randomly select one available neighbor.
-5. Open a passage between the current cell and that neighbor.
-6. Push the neighbor onto the stack.
-7. When a cell has no available neighbor, backtrack.
-8. Continue until no more cells can be explored.
-
-An iterative implementation is used instead of recursive DFS, avoiding dependence on Python's recursion depth for larger mazes.
-
-A seeded `random.Random` instance is used so generation can be reproducible.
-
----
-
-## Why DFS?
-
-Randomized DFS is well suited to maze generation because it naturally builds a connected spanning structure while visiting cells.
-
-In perfect mode, avoiding connections to already visited cells prevents cycles from being introduced during the initial generation.
-
-It is also straightforward to extend: in imperfect mode, additional passages can be opened after the initial DFS generation to create loops and reduce dead ends.
-
----
-
-## Shortest Path
+<img src="https://img.shields.io/badge/SHORTEST PATH-6A0DAD?style=for-the-badge" />
 
 The shortest path between the entry and exit is computed using **Breadth-First Search (BFS)**.
 
-BFS explores the maze level by level and stores the parent of each discovered cell.
+BFS explores the maze level by level.
 
-Once the exit is reached, the path is reconstructed by following the parent relationships back to the entry.
+For every discovered cell, the algorithm stores its parent.
 
-The resulting path is then reversed to obtain:
+Once the exit is reached, the path is reconstructed backwards and then reversed.
 
-```text
-ENTRY -> ... -> EXIT
+```txt
+ENTRY
+  ↓
+BFS
+  ↓
+Explore neighbors level by level
+  ↓
+Store parent of each cell
+  ↓
+EXIT FOUND
+  ↓
+Follow parents backwards
+  ↓
+Reverse path
+  ↓
+ENTRY → ... → EXIT
 ```
 
-The path can be displayed in the interfaces and is also converted to a sequence of directions:
+The path is also converted into directions:
 
-```text
-N
-E
-S
-W
+```txt
+N → North
+E → East
+S → South
+W → West
 ```
 
----
+Example:
 
-## Wall Representation
+```txt
+EESSSEENN...
+```
 
-Each maze cell stores its walls as a hexadecimal bit mask.
+<div align="center">
 
-The wall values are:
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/WALL ENCODING-6A0DAD?style=for-the-badge" />
+
+Each maze cell stores its walls as a bit mask.
 
 | Direction | Value |
-|-----------|------:|
+|:---:|:---:|
 | North | `1` |
 | East | `2` |
 | South | `4` |
 | West | `8` |
 
-The values of existing walls are combined using bitwise OR.
+The existing walls are combined using bitwise OR.
 
-For example, a cell containing all four walls has:
+Example:
 
-```text
+```txt
+North = 1
+East  = 2
+South = 4
+West  = 8
+
 1 + 2 + 4 + 8 = 15
 ```
 
-which is written in hexadecimal as:
+Decimal `15` becomes:
 
-```text
+```txt
 F
 ```
 
----
+in hexadecimal.
 
-## Configuration
+Therefore:
+
+```txt
+┌───┐
+│   │  → N + E + S + W
+└───┘  → 1 + 2 + 4 + 8
+       → 15
+       → F
+```
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/CONFIGURATION-6A0DAD?style=for-the-badge" />
 
 The program reads its parameters from a configuration file.
 
-Example `config.txt`:
+Example:
 
-```text
+```txt
 WIDTH=20
 HEIGHT=15
 ENTRY=0,0
@@ -188,31 +453,81 @@ SEED=42
 ### Configuration fields
 
 | Key | Description |
-|-----|-------------|
+|---|---|
 | `WIDTH` | Maze width |
 | `HEIGHT` | Maze height |
 | `ENTRY` | Entry coordinates as `x,y` |
 | `EXIT` | Exit coordinates as `x,y` |
 | `OUTPUT_FILE` | Generated output file |
-| `PERFECT` | Enables or disables perfect mode |
+| `PERFECT` | Perfect or imperfect generation mode |
 | `SEED` | Random generation seed |
 
-The parser checks required fields, maze dimensions, coordinates, integer values and ensures that entry and exit are different.
+The parser validates:
 
----
+```txt
+REQUIRED FIELDS        [OK]
+DIMENSIONS             [OK]
+COORDINATES            [OK]
+INTEGER VALUES         [OK]
+ENTRY != EXIT          [OK]
+PERFECT BOOLEAN        [OK]
+```
 
-## Usage
+`PERFECT` must strictly be:
 
-Run the main program with:
+```txt
+PERFECT=True
+```
+
+or:
+
+```txt
+PERFECT=False
+```
+
+Invalid values are rejected.
+
+Example:
+
+```txt
+PERFECT=plop
+
+> ERROR: PERFECT must be either True or False
+```
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/INSTRUCTIONS-6A0DAD?style=for-the-badge" />
+
+### Installation
+
+Create and activate a virtual environment:
 
 ```bash
-python3 a_maze_ing.py config.txt
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Install the project and development tools:
+
+```bash
+make install
+```
+
+### Run
+
+```bash
+make run
 ```
 
 or:
 
 ```bash
-make run
+python3 a_maze_ing.py config.txt
 ```
 
 A different configuration file can be supplied with:
@@ -221,22 +536,134 @@ A different configuration file can be supplied with:
 make run CONFIG=another_config.txt
 ```
 
-The generated maze is written to the file specified by `OUTPUT_FILE`.
+After generation:
 
----
+```txt
+Choose display mode:
 
-## Output Format
+[1] Terminal
+[2] Pygame
+
+Choice:
+```
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/TERMINAL MODE-6A0DAD?style=for-the-badge" />
+
+Select:
+
+```txt
+[1] Terminal
+```
+
+The maze is displayed directly inside the terminal.
+
+```txt
+S → Start
+E → Exit
+. → Shortest path
+```
+
+### Controls
+
+```txt
+P → Show / hide shortest path
+R → Regenerate maze
+C → Change wall color
+Q → Quit
+```
+
+Wall colors cycle while the program is running:
+
+```txt
+WHITE
+  ↓
+RED
+  ↓
+GREEN
+  ↓
+BLUE
+  ↓
+YELLOW
+  ↓
+MAGENTA
+  ↓
+CYAN
+  ↓
+WHITE
+```
+
+The terminal display can also be launched directly with:
+
+```bash
+python3 -m display.terminal
+```
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/PYGAME MODE-6A0DAD?style=for-the-badge" />
+
+Select:
+
+```txt
+[2] Pygame
+```
+
+The graphical interface displays:
+
+- maze walls;
+- the `42` pattern;
+- start and exit positions;
+- the shortest path when enabled;
+- interactive controls.
+
+### Controls
+
+```txt
+P → Show / hide shortest path
+R → Regenerate maze
+C → Change wall color
+Q → Quit
+```
+
+The maze automatically adapts its cell size to fit inside the display area.
+
+The Pygame interface can also be launched directly with:
+
+```bash
+python3 -m display.pygame_display
+```
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/OUTPUT FORMAT-6A0DAD?style=for-the-badge" />
 
 The output file contains:
 
-1. the hexadecimal representation of the maze;
-2. the entry coordinates;
-3. the exit coordinates;
-4. the shortest path encoded using `N`, `E`, `S`, and `W`.
+```txt
+1. Hexadecimal maze
+2. Empty line
+3. Entry coordinates
+4. Exit coordinates
+5. Shortest path
+```
 
 Example structure:
 
-```text
+```txt
 FFFFFFFF
 ...
 FFFFFFFF
@@ -248,78 +675,126 @@ EESSSE...
 
 The actual hexadecimal maze and path depend on the configuration and seed.
 
----
+<div align="center">
 
-## Terminal Display
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
 
-A terminal interface is available in:
+</div>
 
-```text
-display/terminal.py
+<img src="https://img.shields.io/badge/PROJECT ARCHITECTURE-6A0DAD?style=for-the-badge" />
+
+```txt
+Amazing/
+│
+├── a_maze_ing.py
+├── config_parser.py
+├── config.txt
+├── Makefile
+├── pyproject.toml
+├── mypy.ini
+├── .flake8
+├── .gitignore
+├── LICENSE.md
+├── README.md
+├── note.md
+│
+├── mazegen-0.1.0-py3-none-any.whl
+│
+├── mazegen/
+│   ├── __init__.py
+│   ├── generator.py
+│   └── pattern42.py
+│
+├── display/
+│   ├── __init__.py
+│   ├── terminal.py
+│   └── pygame_display.py
+│
+└── tests/
+    ├── test_pattern42.py
+    └── test_pacman.py
 ```
 
-Run it with:
+<div align="center">
 
-```bash
-python3 -m display.terminal
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/KEY CODE ARCHITECTURE-6A0DAD?style=for-the-badge" />
+
+### `a_maze_ing.py`
+
+Main program orchestrator.
+
+```txt
+CONFIG
+  ↓
+PARSE
+  ↓
+CREATE 42 PATTERN
+  ↓
+CREATE MazeGenerator
+  ↓
+GENERATE
+  ↓
+WRITE OUTPUT
+  ↓
+SELECT DISPLAY
 ```
 
-Controls:
+### `config_parser.py`
 
-```text
-P - Show / hide the shortest path
-R - Regenerate the maze
-Q - Quit
+Responsible for:
+
+```txt
+READ CONFIG
+    ↓
+PARSE KEY / VALUE
+    ↓
+VALIDATE
+    ↓
+CONVERT TYPES
+    ↓
+RETURN CONFIGURATION
 ```
 
-The terminal uses:
+### `mazegen/generator.py`
 
-```text
-S - Start
-E - Exit
-. - Shortest path
-```
+Contains the main maze generation and pathfinding logic.
 
----
+Responsibilities include:
 
-## Pygame Display
+- DFS generation;
+- perfect / imperfect modes;
+- passage creation;
+- wall management;
+- BFS pathfinding;
+- hexadecimal grid generation.
 
-An interactive graphical visualization is available using Pygame.
+### `mazegen/pattern42.py`
 
-Run:
+Creates and positions the closed `42` pattern.
 
-```bash
-python3 -m display.pygame_display
-```
+### `display/terminal.py`
 
-The graphical interface displays:
+Handles the interactive ASCII terminal visualization.
 
-- maze walls;
-- the `42` pattern;
-- start and exit positions;
-- the shortest path when enabled;
-- interactive controls.
+### `display/pygame_display.py`
 
-Controls:
+Handles the interactive graphical visualization.
 
-```text
-P - Show / hide shortest path
-R - Regenerate maze
-C - Change wall color
-Q - Quit
-```
+<div align="center">
 
-The maze automatically adapts its cell size to fit inside the display area.
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
 
----
+</div>
 
-## Reusable `mazegen` Package
+<img src="https://img.shields.io/badge/REUSABLE MAZEGEN PACKAGE-BB00FF?style=for-the-badge" />
 
-The maze generator is also provided as a standalone reusable Python package.
+The maze generator is provided as a reusable standalone Python package.
 
-Package structure:
-
-```text
+```txt
 mazegen/
 ├── __init__.py
 ├── generator.py
@@ -343,7 +818,7 @@ maze = MazeGenerator(
 maze.generate()
 ```
 
-The main public operations include:
+Main public operations:
 
 ```python
 maze.generate()
@@ -352,13 +827,19 @@ maze.has_wall(x, y, direction)
 maze.to_grid()
 ```
 
----
+This allows the maze generation logic to be reused independently from the A-Maze-ing application.
 
-## Building the Package
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/PACKAGE BUILD-6A0DAD?style=for-the-badge" />
 
 The package configuration is defined in:
 
-```text
+```txt
 pyproject.toml
 ```
 
@@ -374,31 +855,35 @@ or:
 python3 -m build --wheel --outdir .
 ```
 
-The resulting package follows the required naming convention:
+Generated package:
 
-```text
+```txt
 mazegen-0.1.0-py3-none-any.whl
 ```
 
-It can be installed in another environment with:
+Install it in another environment with:
 
 ```bash
 python3 -m pip install ./mazegen-0.1.0-py3-none-any.whl
 ```
 
-and imported with:
+Then:
 
 ```python
 from mazegen import MazeGenerator
 ```
 
----
+<div align="center">
 
-## Tests
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/TESTING-6A0DAD?style=for-the-badge" />
 
 The project uses `pytest`.
 
-Run all tests with:
+Run:
 
 ```bash
 make test
@@ -410,22 +895,32 @@ or:
 python3 -m pytest -v
 ```
 
-The current test suite verifies:
+The test suite verifies:
 
-- the `42` pattern contains the expected blocked cells;
-- every `42` cell remains fully closed;
-- the pattern is omitted when the maze is too small;
-- imperfect mode remains connected;
-- imperfect mode limits dead ends;
-- no fully open `3x3` area is created.
+```txt
+42 PATTERN CLOSED CELLS        [OK]
+SMALL MAZE PATTERN HANDLING   [OK]
+PAC-MAN CONNECTIVITY          [OK]
+DEAD END LIMITING             [OK]
+OPEN 3x3 PREVENTION           [OK]
+MULTIPLE SEEDS                [OK]
+```
 
-The tests are executed across multiple seeds to check generation behavior under different random configurations.
+<div align="center">
 
----
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
 
-## Code Quality
+</div>
 
-The project uses both `flake8` and `mypy`.
+<img src="https://img.shields.io/badge/CODE QUALITY-6A0DAD?style=for-the-badge" />
+
+The project uses:
+
+```txt
+flake8
+mypy
+pytest
+```
 
 Run:
 
@@ -433,93 +928,130 @@ Run:
 make lint
 ```
 
-This performs:
+This executes:
 
 ```bash
 flake8 .
 mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 ```
 
-A stricter optional check is also available:
+A stricter optional check is available:
 
 ```bash
 make lint-strict
 ```
 
----
+<div align="center">
 
-## Project Structure
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
 
-```text
-Amazing/
-├── a_maze_ing.py
-├── config_parser.py
-├── config.txt
-├── Makefile
-├── pyproject.toml
-├── mypy.ini
-├── .flake8
-├── .gitignore
-├── LICENSE.md
-├── README.md
-├── note.md
-├── mazegen-0.1.0-py3-none-any.whl
-│
-├── mazegen/
-│   ├── __init__.py
-│   ├── generator.py
-│   └── pattern42.py
-│
-├── display/
-│   ├── __init__.py
-│   ├── terminal.py
-│   └── pygame_display.py
-│
-└── tests/
-    ├── test_pattern42.py
-    └── test_pacman.py
-```
+</div>
 
----
-
-## Makefile
-
-Useful commands:
+<img src="https://img.shields.io/badge/MAKEFILE-6A0DAD?style=for-the-badge" />
 
 ```bash
-make run          # Run the maze generator
+make install      # Install project and development tools
+make run          # Run A-Maze-ing
 make test         # Run pytest
 make lint         # Run flake8 and mypy
 make lint-strict  # Run stricter type checks
-make build        # Build the mazegen wheel
+make build        # Build mazegen wheel
 make clean        # Remove caches
 make fclean       # Remove caches and build artifacts
 make re           # Clean and run again
 make help         # Display available Makefile commands
 ```
 
----
+<div align="center">
 
-## Resources
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+🎓 <img src="https://img.shields.io/badge/KEY WHAT THIS PROJECT TAUGHT ME-6A0DAD?style=for-the-badge" />
+
+- implementing randomized DFS;
+- understanding graph traversal;
+- using BFS for shortest paths;
+- understanding perfect and imperfect mazes;
+- representing walls with bit masks;
+- using hexadecimal encoding;
+- designing reproducible algorithms with seeds;
+- validating configuration files;
+- building interactive terminal interfaces;
+- building graphical interfaces with Pygame;
+- writing reusable Python modules;
+- packaging Python code;
+- writing automated tests;
+- using type annotations;
+- using `mypy` and `flake8`;
+- separating generation logic from visualization;
+- designing software around reusable components.
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/MENTAL SUMMARY-BB00FF?style=for-the-badge" />
+
+```txt
+I READ THE CONFIG
+        ↓
+I VALIDATE IT
+        ↓
+I BUILD THE 42 PATTERN
+        ↓
+I GENERATE THE MAZE WITH DFS
+        ↓
+I ADD LOOPS IF PERFECT=False
+        ↓
+I FIND THE SHORTEST PATH WITH BFS
+        ↓
+I ENCODE THE WALLS IN HEXADECIMAL
+        ↓
+I WRITE THE OUTPUT FILE
+        ↓
+I DISPLAY THE MAZE
+        ↓
+TERMINAL OR PYGAME
+```
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/RESOURCES-6A0DAD?style=for-the-badge" />
 
 Resources used during development include:
 
 - the A-Maze-ing project subject;
-- Python documentation for the standard library features used by the project;
-- Pygame documentation for the graphical interface.
-- Wikipedia:
-  - https://en.wikipedia.org/wiki/Maze_generation_algorithm
-  -
-- YouTube tutorials and educational videos:
-  - https://www.youtube.com/watch?v=i5mmGBdLOnM
-  - https://www.youtube.com/watch?v=jZQ31-4_8KM
-  - https://www.youtube.com/watch?v=uctN47p_KVk
+- Python documentation;
+- Pygame documentation;
+- Wikipedia — Maze generation algorithm;
+- YouTube tutorials and educational videos.
 
-These resources were used to better understand maze generation,
-algorithms, Python concepts, and the implementation of the project.
----
+### References
 
-## AI Usage
+- Maze generation algorithm:  
+  `https://en.wikipedia.org/wiki/Maze_generation_algorithm`
+
+- YouTube — Maze / algorithm resources:  
+  `https://www.youtube.com/watch?v=i5mmGBdLOnM`
+
+- YouTube — Maze / algorithm resources:  
+  `https://www.youtube.com/watch?v=jZQ31-4_8KM`
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<img src="https://img.shields.io/badge/AI USAGE-6A0DAD?style=for-the-badge" />
 
 AI tools were used as development support during the project.
 
@@ -536,16 +1068,38 @@ AI-generated suggestions were reviewed, adapted and tested against the actual pr
 
 The maze generation logic, project integration, testing and final validation were carried out and verified by the project authors.
 
----
+<div align="center">
 
-## License
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
 
-This project is distributed under the MIT License.
+</div>
+
+<img src="https://img.shields.io/badge/LICENSE-6A0DAD?style=for-the-badge" />
+
+This project is distributed under the **MIT License**.
 
 See:
 
-```text
+```txt
 LICENSE.md
 ```
 
 for the complete license text.
+
+<div align="center">
+
+⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻⸻
+
+</div>
+
+<div align="center">
+
+👩🏽‍💻 **AUTHORS**
+
+*This activity has been created as part of the 42 curriculum by **celfofan** and **mcheddad**.*
+
+Built with Python, algorithms, mazes and patience.
+
+`DFS → BFS → HEX → TERMINAL → PYGAME`
+
+</div>

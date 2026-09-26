@@ -17,12 +17,8 @@ all: run
 ## install : installe les dependances du projet
 install:
 	$(PIP) install --upgrade pip
-	@if [ -f requirements.txt ]; then \
-		$(PIP) install -r requirements.txt; \
-	else \
-		echo "requirements.txt absent -> installation des outils de base"; \
-		$(PIP) install flake8 mypy build pytest; \
-	fi
+	$(PIP) install -e .
+	$(PIP) install flake8 mypy build pytest
 
 ## run : lance le programme principal (make run CONFIG=autre.txt)
 run:

@@ -115,7 +115,16 @@ def convert_config(data: dict[str, str]) -> MazeConfig:
         )
 
     output_file = data["OUTPUT_FILE"]
-    perfect = data["PERFECT"].lower() == "true"
+    perfect_value = data["PERFECT"].strip().lower()
+
+    if perfect_value == "true":
+        perfect = True
+    elif perfect_value == "false":
+        perfect = False
+    else:
+        raise ValueError(
+            "PERFECT must be either True or False"
+        )
     seed = parse_int(data, "SEED")
 
     return MazeConfig(
